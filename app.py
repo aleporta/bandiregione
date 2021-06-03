@@ -19,9 +19,9 @@ def random_color_func(word=None, font_size=None, position=None,  orientation=Non
 
 
 ## load models
-with open('results\\final_pipeline.pickle', 'rb') as file:
+with open('results//final_pipeline.pickle', 'rb') as file:
     pipeline = pickle.load(file)
-data = pd.read_csv('results\\cleaned.csv')
+data = pd.read_csv('results//cleaned.csv')
 data.fillna(value = '', inplace=True)
 n_words = 20
 

@@ -60,7 +60,7 @@ if platform_switch:
     y = np.array([npositive, len(data) - npositive])
     mylabels = ["Commenti positivi", "Commenti negativi"]
     colors = ['#32a897', '#eb6b34'] #blue,  red
-    plt.pie(y, labels = mylabels, colors = colors, explode = [0 , 0.1], radius=0.7)
+    plt.pie(y, labels = mylabels, colors = colors, explode = [0 , 0.1], radius=0.8)
     col1.pyplot() 
 
     #generate word lists
@@ -76,7 +76,7 @@ if platform_switch:
 
     #generate wordcloud
     if polarity_switch == "Positivo":
-        wordcloud = WordCloud(background_color='white').generate(positive_words)     
+        wordcloud = WordCloud(background_color='white', width = 400, height=400).generate(positive_words)     
     else:
         wordcloud = WordCloud(background_color='white',
         color_func=random_color_func, width = 400, height=400).generate(negative_words)

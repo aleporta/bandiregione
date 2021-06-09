@@ -34,7 +34,7 @@ st.sidebar.image('data/logo-regione.jpg')
 
 platform_switch = st.sidebar.selectbox(
     'Seleziona la piattaforma',
-    piattaforme
+    [elemento for elemento in piattaforme if elemento not in ['', 'sisco']]
 )
 
 polarity_switch = st.sidebar.radio(
@@ -50,6 +50,14 @@ if platform_switch:
     except:
         st.write("too small size")
 
+        
+    npositive = len(data[data['target'] == 1])
+    y = np.array([npositive, len(data) - npositive])
+    mylabels = ["Commenti positivi", "Commenti negativi"]
+    colors = ['#32a897', '#a87b32']
+
+    plt.pie(y, labels = mylabels, colors = colors, explode = [0.1, 0.1])
+    st.pyplot() 
     #generate word lists
     index_positive = np.argsort(-1*pipeline[1].coef_)[0][: n_words]
     positive_words = ""

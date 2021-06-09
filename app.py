@@ -30,7 +30,7 @@ bandi = data['bando'].unique()
 #header
 st.write("Versione beta 1.0")
 #sidebar
-st.sidebar.image('data//logo-regione.jpg')
+st.sidebar.image('data/logo-regione.jpg')
 
 platform_switch = st.sidebar.selectbox(
     'Seleziona la piattaforma',

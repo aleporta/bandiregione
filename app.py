@@ -6,9 +6,11 @@ import streamlit as st
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
+st.set_page_config(page_title='customer satisfaction', page_icon=None, layout='wide', initial_sidebar_state='auto')
+
 st.set_option('deprecation.showPyplotGlobalUse', False)
 plt.axis("off")
-#plt.figure( figsize = (15, 10))
+plt.figure( figsize = (10, 7))
 plt.tight_layout(pad = 0)
 
 def random_color_func(word=None, font_size=None, position=None,  orientation=None, font_path=None, random_state=None):
@@ -27,10 +29,9 @@ n_words = 20
 
 piattaforme = data['piattaforma'].unique()
 bandi = data['bando'].unique()
-#header
-st.write("Versione beta 1.0")
+
 #sidebar
-st.sidebar.image('data/logo-regione.jpg')
+st.sidebar.image('data//logo-regione.jpg')
 
 platform_switch = st.sidebar.selectbox(
     'Seleziona la piattaforma',
@@ -38,26 +39,30 @@ platform_switch = st.sidebar.selectbox(
 )
 
 polarity_switch = st.sidebar.radio(
-    'Seleziona per mostrare aspetti positivi e negativi',
-    ('Positivo', 'Negativo')
+    'Seleziona per mostrare aspetti positivi e negativi nella wordcloud',
+    ('Negativo', 'Positivo')
 )
 
+#init columns layout
+col1, col2 = st.beta_columns(2)
+
 if platform_switch:
-    #load platdorm
+    #load platform
     temp = data[data['piattaforma'] == platform_switch]
     try:
         pipeline.fit(temp['commento_p'], temp['target'])
     except:
         st.write("too small size")
 
-        
-    npositive = len(data[data['target'] == 1])
+
+    ##pie plot    
+    npositive = len(temp[temp['target'] == 1])
     y = np.array([npositive, len(data) - npositive])
     mylabels = ["Commenti positivi", "Commenti negativi"]
-    colors = ['#32a897', '#a87b32']
+    colors = ['#32a897', '#eb6b34'] #blue,  red
+    plt.pie(y, labels = mylabels, colors = colors, explode = [0 , 0.1], radius=0.7)
+    col1.pyplot() 
 
-    plt.pie(y, labels = mylabels, colors = colors, explode = [0.1, 0.1])
-    st.pyplot() 
     #generate word lists
     index_positive = np.argsort(-1*pipeline[1].coef_)[0][: n_words]
     positive_words = ""
@@ -74,8 +79,10 @@ if platform_switch:
         wordcloud = WordCloud(background_color='white').generate(positive_words)     
     else:
         wordcloud = WordCloud(background_color='white',
-        color_func=random_color_func).generate(negative_words)
+        color_func=random_color_func, width = 400, height=400).generate(negative_words)
+    plt.axis("off")
     plt.imshow(wordcloud, interpolation = 'bilinear')
-    st.pyplot()
+    col2.pyplot()
 
+st.sidebar.write('versione beta: 1.1')
 
